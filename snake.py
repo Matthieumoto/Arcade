@@ -1,61 +1,104 @@
 from setting import *
 import snake_game
 from pygame.locals import *
-from random import randint
-
+import fenetre
+import random
 
 def main():
-    global score
     pygame.init()
 
-    screen_width = 400
-    screen_height = 400
-    screen = pygame.display.set_mode((screen_width, screen_height))
-    score = snake_game.charger_donnees()
-    if not score:
-        score = {'best_score': 0}
-    pygame.display.set_caption(f"Snake | Meilleur score : {score['best_score']}")
+    k = 15
 
-    background_color = (255, 255, 255)
-    screen.fill(background_color)
+    screen_width = 400
+    screen_hight = 400
+    screen = pygame.display.set_mode((screen_width, screen_hight))
+    
+    score = snake_game.charger_donnees()
+    pygame.display.set_caption(f"Snake | Meilleur score : {score['best_score']}")
+    
+    background_color = (200, 200, 200)
+
+    def our_snake(snake_list):
+        for i in snake_list:
+            pygame.draw.rect(screen, green, [i[0], i[1], 15, 15])
+
+    point = 0 
+    green = (0, 128, 0)
+    red = (255, 0, 0)
+
+    y1 = screen_width / 2
+    x1 = screen_hight /  2
+    x1_change = 0
+    y1_change = 0
+
+    snake_List = []
+    Length_of_snake = 1
+
+    foodx = round(random.randrange(0, screen_width - 20) / 10.0) * 10.0
+    foody = round(random.randrange(0, screen_hight - 20) / 10.0) * 10.0
+    p1 = foodx + 5
+    p2 = foody + 5
 
     clock = pygame.time.Clock()
 
-    running = True
-    personnage_x = 200
-    personnage_y = 200
+    game_over = False
 
-    apple_x, apple_y = randint(0, 400), randint(0, 400)  # Initialisez les coordonnées de la pomme
-
-    while running:
+    while not game_over:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                game_over = True
 
-        # Efface l'écran
         screen.fill(background_color)
 
-        # Gestion des touches fléchées
-        keys = pygame.key.get_pressed()
-        if keys[K_LEFT]:
-            personnage_x -= 5
-        if keys[K_RIGHT]:
-            personnage_x += 5
-        if keys[K_UP]:
-            personnage_y -= 5
-        if keys[K_DOWN]:
-            personnage_y += 5
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                x1_change = -5
+                y1_change = 0
+            elif event.key == pygame.K_RIGHT:
+                x1_change = 5
+                y1_change = 0
+            elif event.key == pygame.K_UP:
+                y1_change = -5
+                x1_change = 0
+            elif event.key == pygame.K_DOWN:
+                y1_change = 5
+                x1_change = 0
 
-        x, y = screen_width // 2, screen_height // 2
-        square_size = 10  # Taille du carré
-        square_color = (0, 128, 0)  # Couleur du carré
-        pygame.draw.rect(screen, square_color, (x, y, square_size, square_size))
-        
-        apple_x, apple_y = snake_game.pomme(screen, personnage_x, personnage_y, apple_x, apple_y)  # Obtenez les nouvelles coordonnées de la pomme
+        x1 += x1_change
+        y1 += y1_change
+
+        pygame.draw.rect(screen, green, [x1, y1, 15, 15])
+
+        snake_Head = []
+        snake_Head.append(x1)
+        snake_Head.append(y1)
+        snake_List.append(snake_Head)
+        if len(snake_List) > Length_of_snake:
+            del snake_List[0]
 
         # Mise à jour de l'affichage
+        pygame.draw.rect(screen, (255,255,255), [foodx, foody, 20, 20])
+        pygame.draw.rect(screen, red, [p1, p2, 10, 10])
+        our_snake(snake_List)
         pygame.display.update()
 
-        clock.tick(60)
+        # Vérifier la collision avec la nourriture en dehors de la boucle principale
+        if (foodx <= x1 <= foodx + 20) and (foody <= y1 <= foody + 20):
+            foodx = round(random.randrange(0, screen_width - 20) / 10.0) * 10.0
+            foody = round(random.randrange(0, screen_hight - 20) / 10.0) * 10.0
+            p1 = foodx + 5
+            p2 = foody + 5
+            Length_of_snake += 1
+            point += 1
+            k += 0.5
+            snake_game.actualiser(point, score)
 
-    pygame.display.update()
+        # Vérifier les collisions et conditions de fin du jeu
+        if (x1 == screen_width - 15 or x1 == 0 or y1 == screen_hight - 15 or y1 == 0
+            or any(x == snake_Head for x in snake_List[:-1])):
+            fenetre.mort(point, score)
+            game_over = True
+
+        clock.tick(k)
+
+pygame.quit()
