@@ -31,7 +31,7 @@ def ma_fenetre():
     bouton_jouer_snake = Button(m, text="Jouer", command=lambda: [fenetre.destroy(), snake.main()])
     bouton_jouer_snake.pack()
 
-    bouton_quit = Button(fenetre, text="Quitter", command=lambda: fenetre.quit())
+    bouton_quit = Button(fenetre, text="Quitter", command=lambda: fenetre.destroy())
     bouton_quit.pack()
 
     fenetre.mainloop()

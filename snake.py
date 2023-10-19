@@ -77,7 +77,7 @@ def main():
             del snake_List[0]
 
         # Mise à jour de l'affichage
-        pygame.draw.rect(screen, (255,255,255), [foodx, foody, 20, 20])
+        pygame.draw.rect(screen, background_color, [foodx, foody, 20, 20])
         pygame.draw.rect(screen, red, [p1, p2, 10, 10])
         our_snake(snake_List)
         pygame.display.update()
