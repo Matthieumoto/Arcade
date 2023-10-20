@@ -1,5 +1,6 @@
 from setting import *
 import snake_game
+from pygame import *
 from pygame.locals import *
 import fenetre
 import random
@@ -7,7 +8,16 @@ import random
 def main():
     pygame.init()
 
-    k = 15
+    k = 2
+    k1 = k
+
+    current_direction = "h"
+
+    snake_List = []
+    Length_of_snake = 1
+
+    snake_block = 15
+    point = 0
 
     screen_width = 400
     screen_hight = 400
@@ -17,10 +27,15 @@ def main():
     pygame.display.set_caption(f"Snake | Meilleur score : {score['best_score']}")
     
     background_color = (200, 200, 200)
+    score_font = pygame.font.SysFont("comicsansms", 18)
 
-    def our_snake(snake_list):
-        for i in snake_list:
-            pygame.draw.rect(screen, green, [i[0], i[1], 15, 15])
+    def our_snake(snake_block, snake_list):
+        for x in snake_list:
+            pygame.draw.rect(screen, green, [x[0], x[1], snake_block, snake_block])
+
+    def Your_score(point):
+        value = score_font.render("Score: " + str(point), True, (0,0,0))
+        screen.blit(value, [0, 0])
 
     point = 0 
     green = (0, 128, 0)
@@ -31,13 +46,10 @@ def main():
     x1_change = 0
     y1_change = 0
 
-    snake_List = []
-    Length_of_snake = 1
-
     foodx = round(random.randrange(0, screen_width - 20) / 10.0) * 10.0
-    foody = round(random.randrange(0, screen_hight - 20) / 10.0) * 10.0
-    p1 = foodx + 5
-    p2 = foody + 5
+    foody = round(random.randrange(0, 385 - 35) / 10.0) * 10.0
+    p1 = foodx + 10
+    p2 = foody + 10
 
     clock = pygame.time.Clock()
 
@@ -51,23 +63,25 @@ def main():
         screen.fill(background_color)
 
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
-                x1_change = -5
+            if event.key == pygame.K_LEFT and current_direction != "d":
+                x1_change = - k
                 y1_change = 0
-            elif event.key == pygame.K_RIGHT:
-                x1_change = 5
+                current_direction = "g"
+            elif event.key == pygame.K_RIGHT and current_direction != "g":
+                x1_change = k
                 y1_change = 0
-            elif event.key == pygame.K_UP:
-                y1_change = -5
+                current_direction = "d"
+            elif event.key == pygame.K_UP and current_direction != "b":
+                y1_change = - k1
                 x1_change = 0
-            elif event.key == pygame.K_DOWN:
-                y1_change = 5
+                current_direction = "h"
+            elif event.key == pygame.K_DOWN and current_direction != "h":
+                y1_change = k1
                 x1_change = 0
+                current_direction = "b"
 
         x1 += x1_change
         y1 += y1_change
-
-        pygame.draw.rect(screen, green, [x1, y1, 15, 15])
 
         snake_Head = []
         snake_Head.append(x1)
@@ -76,29 +90,37 @@ def main():
         if len(snake_List) > Length_of_snake:
             del snake_List[0]
 
+        for x in snake_List[:-1]:
+                if x == snake_Head:
+                    game_over = True
+    
         # Mise à jour de l'affichage
         pygame.draw.rect(screen, background_color, [foodx, foody, 20, 20])
         pygame.draw.rect(screen, red, [p1, p2, 10, 10])
-        our_snake(snake_List)
+
+        our_snake(snake_block, snake_List)
+        Your_score(Length_of_snake - 1)
+
         pygame.display.update()
 
         # Vérifier la collision avec la nourriture en dehors de la boucle principale
         if (foodx <= x1 <= foodx + 20) and (foody <= y1 <= foody + 20):
-            foodx = round(random.randrange(0, screen_width - 20) / 10.0) * 10.0
-            foody = round(random.randrange(0, screen_hight - 20) / 10.0) * 10.0
-            p1 = foodx + 5
-            p2 = foody + 5
+            foodx = round(random.randrange(0, 385 - 35) / 10.0) * 10.0
+            foody = round(random.randrange(0, 385 - 35) / 10.0) * 10.0
+            p1 = foodx + 10
+            p2 = foody + 10
             Length_of_snake += 1
             point += 1
-            k += 0.5
+            k += 0.05
+            k1 += 0.05
             snake_game.actualiser(point, score)
 
         # Vérifier les collisions et conditions de fin du jeu
-        if (x1 == screen_width - 15 or x1 == 0 or y1 == screen_hight - 15 or y1 == 0
+        if (x1 >= (screen_width - 15) or x1 < 0 or y1 >= (screen_width - 15) or y1 < 0
             or any(x == snake_Head for x in snake_List[:-1])):
             fenetre.mort(point, score)
             game_over = True
 
-        clock.tick(k)
+        clock.tick(30)
 
 pygame.quit()
