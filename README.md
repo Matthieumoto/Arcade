@@ -52,7 +52,7 @@ Snake :
 
 ## Utilisation
 - Exécutez `app.py` pour lancer l'interface graphique :
-`python app.py` ou `Arcade.exe`
+`python app.py`
 
 - Vous pouvez également utiliser l'exécutable `arcade.exe` pour lancer l'interface graphique sans Python.
 - Sélectionnez le jeu que vous souhaitez jouer depuis l'interface graphique.
