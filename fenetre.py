@@ -3,6 +3,7 @@ from tkinter import *
 import morpion
 import snake
 import snake_game
+import app
 
 def ma_fenetre():
     global score
@@ -51,10 +52,10 @@ def rejouer(resultat):
         choix_label = Label(fenetre, text="Vous avez fait match nul !")
         choix_label.pack()
 
-    bouton_jouer = Button(fenetre, text="Voulez vous rejouer ?", command=lambda: [fenetre.destroy(), pygame.quit(), morpion.main()])
+    bouton_jouer = Button(fenetre, text="Voulez vous rejouer ?", command=lambda: [fenetre.destroy(), pygame.quit(), app.start_music(), morpion.main()])
     bouton_jouer.pack()
 
-    bouton_quit = Button(fenetre, text="Quitter", command=lambda: [fenetre.destroy(),pygame.quit(), ma_fenetre()])
+    bouton_quit = Button(fenetre, text="Quitter", command=lambda: [fenetre.destroy(),pygame.quit(), app.start_music(), ma_fenetre()])
     bouton_quit.pack()
 
     fenetre.mainloop()
@@ -74,10 +75,10 @@ def rejouer2(resultat1):
         choix_label = Label(fenetre, text="Vous avez fait match nul !")
         choix_label.pack()
 
-    bouton_jouer = Button(fenetre, text="Voulez vous rejouer ?", command=lambda: [fenetre.destroy(), pygame.quit(), morpion.main2()])
+    bouton_jouer = Button(fenetre, text="Voulez vous rejouer ?", command=lambda: [fenetre.destroy(), pygame.quit(), app.start_music(), morpion.main2()])
     bouton_jouer.pack()
 
-    bouton_quit = Button(fenetre, text="Quitter", command=lambda: [fenetre.destroy(),pygame.quit(), ma_fenetre()])
+    bouton_quit = Button(fenetre, text="Quitter", command=lambda: [fenetre.destroy(),pygame.quit(), app.start_music(), ma_fenetre()])
     bouton_quit.pack()
 
     fenetre.mainloop()
@@ -95,10 +96,10 @@ def mort(point, score):
     l = Label(fenetre, text=f"Votre meilleur score est de {score['best_score']} points !")
     l.pack()
 
-    bouton_pause = Button(fenetre, text="Rejouer ?", command=lambda: [fenetre.destroy(), pygame.quit(), snake.main()])
+    bouton_pause = Button(fenetre, text="Rejouer ?", command=lambda: [fenetre.destroy(), pygame.quit(),app.start_music(), snake.main()])
     bouton_pause.pack()
 
-    bouton_quit = Button(fenetre, text="Quitter", command=lambda: [fenetre.destroy(),pygame.quit(), ma_fenetre()])
+    bouton_quit = Button(fenetre, text="Quitter", command=lambda: [fenetre.destroy(),pygame.quit(),app.start_music(), ma_fenetre()])
     bouton_quit.pack()
 
     fenetre.mainloop()
