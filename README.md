@@ -66,3 +66,6 @@ Vous pouvez contribuer à ce projet en ajoutant de nouveaux jeux ou en améliora
 ## Licence
 Ce projet est sous licence MIT - voir le fichier [LICENSE](LICENSE) pour plus de détails.
 
+La musique : 
+F_I_R_E_128K_Spectrum_Title_Music.mp3
+https://youtu.be/t7S6qod6tZ8?si=hEvhFDKDn8R9iR3G
