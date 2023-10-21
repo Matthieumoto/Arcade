@@ -3,7 +3,12 @@ from tkinter import *
 import morpion
 import snake
 import snake_game
-import app
+import pygame
+
+def play_music():
+    pygame.mixer.init()
+    pygame.mixer.music.load("musique/Game_Menu_Select.mp3")
+    pygame.mixer.music.play()
 
 def ma_fenetre():
     global score
@@ -14,10 +19,10 @@ def ma_fenetre():
     l = LabelFrame(fenetre, text="Morpion", padx=20, pady=20)
     l.pack(fill="both", expand="no")
 
-    bouton_bot = Button(l, text="Joueur VS Bot", command=lambda: [fenetre.destroy(), morpion.main()])
+    bouton_bot = Button(l, text="Joueur VS Bot", command=lambda: [play_music(), fenetre.destroy(), morpion.main()])
     bouton_bot.pack()
 
-    bouton_jouer = Button(l, text="Joueur VS Joueur", command=lambda: [fenetre.destroy(), morpion.main2()])
+    bouton_jouer = Button(l, text="Joueur VS Joueur", command=lambda: [play_music(), fenetre.destroy(),  morpion.main2()])
     bouton_jouer.pack()
 
     m = LabelFrame(fenetre, text="Snake", padx=20, pady=20)
@@ -29,10 +34,10 @@ def ma_fenetre():
     meilleur_score = Label(m, text=f"Meilleur Score : {score['best_score']}")
     meilleur_score.pack()
 
-    bouton_jouer_snake = Button(m, text="Jouer", command=lambda: [fenetre.destroy(), snake.main()])
+    bouton_jouer_snake = Button(m, text="Jouer", command=lambda: [ play_music(), fenetre.destroy(), snake.main()])
     bouton_jouer_snake.pack()
 
-    bouton_quit = Button(fenetre, text="Quitter", command=lambda: [fenetre.destroy(), pygame.quit()])
+    bouton_quit = Button(fenetre, text="Quitter", command=lambda: [play_music(), fenetre.destroy(), pygame.quit()])
     bouton_quit.pack()
 
     fenetre.mainloop()
@@ -52,10 +57,10 @@ def rejouer(resultat):
         choix_label = Label(fenetre, text="Vous avez fait match nul !")
         choix_label.pack()
 
-    bouton_jouer = Button(fenetre, text="Voulez vous rejouer ?", command=lambda: [fenetre.destroy(), pygame.quit(), app.start_music(), morpion.main()])
+    bouton_jouer = Button(fenetre, text="Voulez vous rejouer ?", command=lambda: [play_music(), fenetre.destroy(), pygame.quit(), morpion.main()])
     bouton_jouer.pack()
 
-    bouton_quit = Button(fenetre, text="Quitter", command=lambda: [fenetre.destroy(),pygame.quit(), app.start_music(), ma_fenetre()])
+    bouton_quit = Button(fenetre, text="Quitter", command=lambda: [play_music(), fenetre.destroy(), pygame.quit(), ma_fenetre()])
     bouton_quit.pack()
 
     fenetre.mainloop()
@@ -75,10 +80,10 @@ def rejouer2(resultat1):
         choix_label = Label(fenetre, text="Vous avez fait match nul !")
         choix_label.pack()
 
-    bouton_jouer = Button(fenetre, text="Voulez vous rejouer ?", command=lambda: [fenetre.destroy(), pygame.quit(), app.start_music(), morpion.main2()])
+    bouton_jouer = Button(fenetre, text="Voulez vous rejouer ?", command=lambda: [ play_music(), fenetre.destroy(), pygame.quit(), morpion.main2()])
     bouton_jouer.pack()
 
-    bouton_quit = Button(fenetre, text="Quitter", command=lambda: [fenetre.destroy(),pygame.quit(), app.start_music(), ma_fenetre()])
+    bouton_quit = Button(fenetre, text="Quitter", command=lambda: [ play_music(), fenetre.destroy(), pygame.quit(), ma_fenetre()])
     bouton_quit.pack()
 
     fenetre.mainloop()
@@ -96,10 +101,23 @@ def mort(point, score):
     l = Label(fenetre, text=f"Votre meilleur score est de {score['best_score']} points !")
     l.pack()
 
-    bouton_pause = Button(fenetre, text="Rejouer ?", command=lambda: [fenetre.destroy(), pygame.quit(),app.start_music(), snake.main()])
+    bouton_pause = Button(fenetre, text="Rejouer ?", command=lambda: [ play_music(), fenetre.destroy(), pygame.quit(), snake.main()])
     bouton_pause.pack()
 
-    bouton_quit = Button(fenetre, text="Quitter", command=lambda: [fenetre.destroy(),pygame.quit(),app.start_music(), ma_fenetre()])
+    bouton_quit = Button(fenetre, text="Quitter", command=lambda: [ play_music(), fenetre.destroy(), pygame.quit(), ma_fenetre()])
     bouton_quit.pack()
+
+    fenetre.mainloop()
+
+def new(point):
+    fenetre = Tk()
+    fenetre.geometry('200x200')
+    fenetre.title("Nouveau Record !")
+
+    l = Label(fenetre, text=f"Nouveau record : {point} points !")
+    l.pack()
+
+    bouton_ok = Button(fenetre, text="Cool !", command=lambda: [fenetre.destroy()])
+    bouton_ok.pack()
 
     fenetre.mainloop()

@@ -4,10 +4,11 @@ from pygame import *
 from pygame.locals import *
 import fenetre
 import random
+import time
 
 def main():
     pygame.init()
-
+    pygame.mixer.init()
     k = 2
     k1 = k
 
@@ -36,7 +37,7 @@ def main():
     def Your_score(point):
         value = score_font.render("Score: " + str(point), True, (0,0,0))
         screen.blit(value, [0, 0])
-
+    
     point = 0 
     green = (0, 128, 0)
     red = (255, 0, 0)
@@ -54,6 +55,9 @@ def main():
     clock = pygame.time.Clock()
 
     game_over = False
+
+    music1 = pygame.mixer.Sound("musique/F_I_R_E_128k_Spectrum_Title_Music.mp3")
+    music1.play()
 
     while not game_over:
         for event in pygame.event.get():
@@ -105,6 +109,8 @@ def main():
 
         # Vérifier la collision avec la nourriture en dehors de la boucle principale
         if (foodx <= x1 <= foodx + 20) and (foody <= y1 <= foody + 20):
+            music2 = pygame.mixer.Sound("musique/Eating_sound_effect.mp3")
+            music2.play()
             foodx = round(random.randrange(0, 385 - 35) / 10.0) * 10.0
             foody = round(random.randrange(0, 385 - 35) / 10.0) * 10.0
             p1 = foodx + 10
@@ -112,12 +118,20 @@ def main():
             Length_of_snake += 1
             point += 1
             k += 0.05
-            k1 += 0.05
+            k1 += 0.05               
             snake_game.actualiser(point, score)
 
         # Vérifier les collisions et conditions de fin du jeu
         if (x1 >= (screen_width - 15) or x1 < 0 or y1 >= (screen_width - 15) or y1 < 0
             or any(x == snake_Head for x in snake_List[:-1])):
+            music1.stop()
+            music3 = pygame.mixer.Sound("musique/Losing_sound_effect.mp3")
+            music3.play()
+            time.sleep(1)
+            if point == score['best_score']:
+                music4 = pygame.mixer.Sound("musique/Victory_Sound_Effect.mp3")
+                music4.play()
+                fenetre.new(point)
             fenetre.mort(point, score)
             game_over = True
 
